@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(shiny)\n\nshinyServer(function(input, output){\n  \n  #PLOT THE PRIOR\n  output$prior <- renderPlot({\n    priorAlpha <- input$alpha\n    priorBeta <- input$beta\n    dum <- seq(0,1, length=10^3)\n    \n    prior<- function(x)\n      ifelse(x>0 & x<1, dbeta(x, shape1 = priorAlpha, shape2 = priorBeta),0)\n    \n    \n    plot(dum, prior(dum), type='n', \n         main = 'Prior', \n         xlab = expression( theta ), ylab=expression(pi*'(' * theta *')'))\n    lines(dum, prior(dum), col=input$color)\n  })\n  \n  #Adjust Number of Heads Input\n  output$HeadsOptions <- renderUI({\n    nT <- input$nTrials\n    sliderInput(\"nHeads\", \"Select number of Successes\", min=0, max=nT, value = 0, step=1)\n    \n  })\n  \n  #Plot the posterior  \n  output$posterior <- renderPlot({\n    a <- input$alpha\n    b <- input$beta\n    nT <- input$nTrials\n    nH <- input$nHeads\n    \n    postAlpha <- a + nH\n    postBeta <- b+ nT - nH\n    dum <- seq(0,1, length=10^3)\n    posterior <- function(x)\n      ifelse(x>0 & x<1, dbeta(x, shape1 = postAlpha, shape2 = postBeta),0)\n    \n    \n    plot(dum, posterior(dum), type='n', \n         main = 'Posterior', \n         xlab=expression(theta), ylab=expression(pi*'(' * theta *' |D)'))\n    lines(dum, posterior(dum), col=input$color)\n  })\n  \n})",
+    "created" : 1503326455739.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2147981638",
+    "id" : "E6E2915C",
+    "lastKnownWriteTime" : 1503326484,
+    "last_content_update" : 1503326484928,
+    "path" : "C:/Users/JustinandAbigail/Desktop/Fun_Projects/Beta_Bernoulli_Shiny_App/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
